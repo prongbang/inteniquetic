@@ -1,0 +1,17 @@
+version: '3.7'
+services:
+  wachasit:
+    image: prongbang/wachasit:1.0
+    ports:
+      - "5000:5000"
+    environment:
+      TZ: "Asia/Bangkok"
+    networks:
+      - wachasit-network
+      - platform-network
+
+networks:
+  wachasit-network:
+    external: true
+  platform-network:
+    external: true

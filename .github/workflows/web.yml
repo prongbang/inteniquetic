@@ -1,0 +1,42 @@
+# Advanced workflow feature
+# https://docs.github.com/en/actions/using-workflows/advanced-workflow-features
+
+name: WEB CI/CD
+
+on:
+  push:
+    branches: [ develop ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  setup:
+    runs-on: self-hosted
+    steps:
+      - run: echo "Setup"
+
+  build:
+    needs: setup
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build the Docker image
+        run: docker build . --file deployments/Dockerfile --tag prongbang/wachasit:1.0
+
+  deploy:
+    needs: build
+    runs-on: self-hosted
+    steps:
+      - name: Deploy the Docker image
+        run: |
+          # env wachasit_tag=$(date +%s)
+          docker stack deploy -c deployments/web-prod.yml --resolve-image always wachasit
+          docker service update wachasit_wachasit --image prongbang/wachasit:1.0 --force
+
+  clean:
+    needs: deploy
+    runs-on: self-hosted
+    steps:
+      - name: Clean the Docker image
+        run: docker system prune -f
