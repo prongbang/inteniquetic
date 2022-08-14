@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wachasit-deployment
+spec:
+  selector:
+    matchLabels:
+      app: wachasit
+  replicas: 1
+  template:
+    metadata:
+      annotations:
+        linkerd.io/inject: enabled
+      labels:
+        app: wachasit
+    spec:
+      containers:
+        - name: wachasit
+          image: ghcr.io/prongbang/wachasit:master
+          imagePullPolicy: IfNotPresent # Always
+          ports:
+            - containerPort: 80
+      # imagePullSecrets:
+      # - name: dockerconfigjson-github-com
