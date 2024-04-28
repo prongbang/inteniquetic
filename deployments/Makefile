@@ -1,5 +1,12 @@
-# make deploy_pod
-deploy_pod:
+# Document:
+# https://gist.github.com/prongbang/7c8a17a493fcabecc01ac4a949194243
+
+# make create_secret
+create_secret:
+	kubectl create secret docker-registry mysecretname --docker-server=https://ghcr.io --docker-username=mygithubusername --docker-password=mygithubreadtoken --docker-email=mygithubemail -n wcs-production
+
+# make deploy_deployment
+deploy_deployment:
 	kubectl create -f deployment.yaml -n wcs-production
 
 # make deploy_service

@@ -9,11 +9,16 @@ spec:
   replicas: 1
   template:
     metadata:
+      annotations:
+        linkerd.io/inject: enabled
       labels:
         app: wachasit
     spec:
       containers:
         - name: wachasit
-          image: prongbang/wachasit:1.0.0
+          image: ghcr.io/prongbang/wachasit:develop
+          imagePullPolicy: Always
           ports:
             - containerPort: 80
+      imagePullSecrets:
+        - name: dockerconfigjson-github-com
