@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wachasit-deployment
+spec:
+  selector:
+    matchLabels:
+      app: wachasit
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: wachasit
+    spec:
+      containers:
+        - name: wachasit
+          image: prongbang/wachasit:1.0.0
+          ports:
+            - containerPort: 80
