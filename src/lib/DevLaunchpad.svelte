@@ -4,6 +4,7 @@
     // ----- Props -----
     export let data: Record<string, string[]> = {
         Rust: [
+            "https://github.com/prongbang/upstream",
             "https://crates.io/crates/cmdwrap",
             "https://crates.io/crates/lazychacha",
             "https://github.com/prongbang/watchx",
