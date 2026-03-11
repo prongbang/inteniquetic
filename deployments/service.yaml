@@ -1,11 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: wachasit-service
+  name: inteniquetic-service
+  labels:
+    app: inteniquetic
 spec:
   ports:
-    - port: 80
+    - name: http
+      port: 80
       targetPort: 80
   selector:
-    app: wachasit
+    app: inteniquetic
   type: LoadBalancer

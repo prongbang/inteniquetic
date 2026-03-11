@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>INTENIQUETIC Launchpad</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.iconify.design/iconify-icon/3.0.0/iconify-icon.min.js"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                50: "#eff6ff",
+                100: "#dbeafe",
+                500: "#3b82f6",
+                700: "#1d4ed8",
+                900: "#1e3a8a"
+              }
+            },
+            borderRadius: {
+              panel: "1rem"
+            }
+          }
+        }
+      };
+    </script>
+  </head>
+  <body class="bg-slate-50 text-slate-900 antialiased">
+    <div id="app"></div>
+    <link data-trunk rel="copy-file" href="static/robots.txt" />
+    <link data-trunk rel="copy-file" href="static/app-ads.txt" />
+    <link data-trunk rel="rust" data-bin="inteniquetic" />
+  </body>
+</html>

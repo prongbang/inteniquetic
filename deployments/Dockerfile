@@ -1,36 +1,24 @@
-# --- Build stage ---
-FROM oven/bun:1 AS build
+# --- Build stage (Leptos CSR via Trunk) ---
+FROM rust:1.88-alpine AS build
 WORKDIR /app
 
-COPY package.json bun.lockb* ./
-RUN bun install --frozen-lockfile
+RUN apk add --no-cache musl-dev pkgconfig openssl-dev && \
+    rustup target add wasm32-unknown-unknown && \
+    cargo install trunk --locked
 
-COPY . .
-RUN bun run build   # SvelteKit + adapter-static -> build/
+COPY Cargo.toml Cargo.lock index.html ./
+COPY src ./src
+COPY static ./static
+
+RUN trunk build --release --dist /dist
 
 # --- Serve stage ---
 FROM nginx:1.25-alpine
 WORKDIR /usr/share/nginx/html
 
-# SPA history fallback
-COPY <<'NGINX' /etc/nginx/conf.d/default.conf
-server {
-  listen 80;
-  server_name _;
-  root /usr/share/nginx/html;
-  index index.html;
+COPY deployments/nginx.conf /etc/nginx/conf.d/default.conf
 
-  location / {
-    try_files $uri $uri/ /index.html;
-  }
-
-  gzip on;
-  gzip_types text/plain text/css application/javascript application/json image/svg+xml;
-  gzip_min_length 1024;
-}
-NGINX
-
-COPY --from=build /app/build ./
+COPY --from=build /dist ./
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]

@@ -1,0 +1,10 @@
+[package]
+name = "inteniquetic"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+leptos = { version = "0.8.17", features = ["csr"] }
+leptos_router = { version = "0.8.9" }
+url = "2.5.4"
+web-sys = { version = "0.3.82", features = ["Clipboard", "Document", "DomTokenList", "Element", "Navigator", "Storage", "Window"] }

@@ -1,24 +1,42 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: wachasit-deployment
+  name: inteniquetic-deployment
+  labels:
+    app: inteniquetic
 spec:
+  replicas: 2
   selector:
     matchLabels:
-      app: wachasit
-  replicas: 1
+      app: inteniquetic
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
   template:
     metadata:
       annotations:
         linkerd.io/inject: enabled
       labels:
-        app: wachasit
+        app: inteniquetic
     spec:
       containers:
-        - name: wachasit
-          image: ghcr.io/prongbang/wachasit:master
-          imagePullPolicy: IfNotPresent # Always
+        - name: inteniquetic
+          image: ghcr.io/prongbang/inteniquetic:master
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: TZ
+              value: Asia/Bangkok
           ports:
             - containerPort: 80
+              name: http
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
       # imagePullSecrets:
-      # - name: dockerconfigjson-github-com
+      #   - name: dockerconfigjson-github-com

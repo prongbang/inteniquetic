@@ -23,3 +23,8 @@ dist-ssr
 *.sln
 *.sw?
 .svelte-kit
+
+
+# Added by cargo
+
+/target
