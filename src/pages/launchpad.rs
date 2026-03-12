@@ -82,7 +82,7 @@ pub fn LaunchpadPage() -> impl IntoView {
     let copy_one_cb = Callback::new(move |url: String| copy_to_clipboard(&url));
 
     view! {
-        <main class="mx-auto flex w-full max-w-6xl flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8">
+        <main class="hide-scrollbar mx-auto flex w-full max-w-6xl flex-col gap-8 overflow-y-auto px-4 py-8 sm:px-6 lg:px-8">
             <header class="relative overflow-hidden rounded-[2rem] border border-white/20 bg-gradient-to-br from-slate-950 via-blue-950 to-cyan-900 p-8 text-white shadow-[0_24px_64px_-28px_rgba(2,6,23,0.85)]">
                 <div class="pointer-events-none absolute inset-0 opacity-20">
                     <div class="absolute -top-16 left-1/3 h-40 w-40 rounded-full bg-cyan-300 blur-3xl"></div>
