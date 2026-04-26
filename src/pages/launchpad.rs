@@ -1,5 +1,6 @@
 use crate::components::launchpad::category_section::CategorySection;
 use crate::components::launchpad::filter_bar::FilterBar;
+use crate::components::launchpad::highlight_section::HighlightSection;
 use crate::components::ui::section::UiSection;
 use crate::services::launchpad_service::get_categories;
 use crate::state::launchpad_state::LaunchpadState;
@@ -97,6 +98,8 @@ pub fn LaunchpadPage() -> impl IntoView {
                 </div>
                 <FilterBar state=state.clone() filter_names=filter_names />
             </header>
+
+            <HighlightSection on_open=open_one_cb on_copy=copy_one_cb />
 
             <section class="space-y-6">
                 {move || {
