@@ -12,11 +12,14 @@ COPY . .
 RUN bunx vite build
 
 # --- Serve stage ---
-FROM nginx:1.27-alpine
+# nginx-unprivileged: runs as non-root (uid 101) with cache/temp dirs already
+# owned correctly at build time, so it works under runtimes that don't allow
+# containers to chown as root (many hosting platforms enforce this).
+FROM nginxinc/nginx-unprivileged:1.27-alpine
 WORKDIR /usr/share/nginx/html
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/dist ./
 
-EXPOSE 80
+EXPOSE 8080
 CMD ["nginx", "-g", "daemon off;"]
