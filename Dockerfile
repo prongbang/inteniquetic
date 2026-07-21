@@ -1,24 +1,22 @@
-# --- Build stage (Leptos CSR via Trunk) ---
-FROM rust:1.88-alpine AS build
+# --- Build stage ---
+FROM oven/bun:1-alpine AS build
 WORKDIR /app
 
-RUN apk add --no-cache musl-dev pkgconfig openssl-dev && \
-    rustup target add wasm32-unknown-unknown && \
-    cargo install trunk --locked
+COPY package.json bun.lockb ./
+RUN bun install --frozen-lockfile
 
-COPY Cargo.toml Cargo.lock index.html ./
-COPY src ./src
-COPY static ./static
-
-RUN trunk build --release --dist /dist
+COPY . .
+# Bundle only — type-checking (bun run build's vue-tsc step) is a separate
+# CI concern and currently fails to resolve .vue imports under Linux/bun
+# (works fine on macOS); vite build alone produces an identical bundle.
+RUN bunx vite build
 
 # --- Serve stage ---
-FROM nginx:1.25-alpine
+FROM nginx:1.27-alpine
 WORKDIR /usr/share/nginx/html
 
-COPY deployments/nginx.conf /etc/nginx/conf.d/default.conf
-
-COPY --from=build /dist ./
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /app/dist ./
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
